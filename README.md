@@ -1,6 +1,6 @@
 # RoboND-Project2-GoChaseIt
 
-
+Please only review the files in Project2 folder.
 
 ```
  .Project2                          # Go Chase It Project
