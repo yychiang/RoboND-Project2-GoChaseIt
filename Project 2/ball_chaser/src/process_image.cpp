@@ -39,26 +39,26 @@ void process_image_callback(const sensor_msgs::Image img)
     // http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/Image.html
 
 
-    vector<int> white_position;  // a vector to store the positions of white pixels
+    
     int positionId; // The position ID of each white pixel we find. 
     // This will be stored in  white_position vector.
 
     // TODO:
     // (1) Loop through each pixel in the image and check if there's a bright white one
+    int sum = 0; //The sum of all column index of all white positions
+    int size = 0;
     for (int i = 0; i < height * step; i += 3) {
         positionId = i % ( width * 3 ) / 3;
         if ( img.data[i] == white_pixel && img.data[i + 1] == white_pixel && img.data[i + 2] == white_pixel ) {
             // Insert the positionId into white_position vector:
-            white_position.push_back(positionId);
+	    sum += positionId;
+	    size++;	
         }         
     }
     // (2) Identify if the average of these pixels falls in the left, mid, or right side of the image
     int avg;
-    int sum = 0;
-    int size = white_position.size();
-    for(int k=0; k < size; k++){
-        sum += white_position[k];            
-    }
+     
+    
 
     if (size == 0){
         // Will request a stop when there's no white ball seen by the camera
