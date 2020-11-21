@@ -30,7 +30,7 @@ double gaussianN(double mu, double sigma2, double x)  // Normalized Gaussian Fun
 
 
 // This function calls the command_robot service to drive the robot in the specified direction
-void drive_robot(float lin_x, float ang_z)
+void drive_robot(float lin_x, float lin_y, float ang_z)
 {
     // TODO: Request a service and pass the velocities to it to drive the robot
     ROS_INFO_STREAM("Driving the bot in the specified velocity and direction.");
@@ -38,6 +38,7 @@ void drive_robot(float lin_x, float ang_z)
     // Request specified velocity and direction
     ball_chaser::DriveToTarget srv;
     srv.request.linear_x = lin_x;
+    srv.request.linear_y = lin_y;
     srv.request.angular_z = ang_z;
 
     // Call the command_robot service and pass the specified velocity and direction.
@@ -109,15 +110,15 @@ void process_image_callback(const sensor_msgs::Image img)
         // Will request a stop when there's no white ball seen by the camera
         if (right_state == 1 && left_state == 0)
         {
-          drive_robot(0.0, -1.0);  // This request a right
+          drive_robot(0.0, 0.0, -1.0);  // This request a right
          }
         else if (right_state == 0 && left_state == 1)
         {
-          drive_robot(0.0, 1.0);  // This request a left   
+          drive_robot(0.0, 0.0, 1.0);  // This request a left   
         }
         else if (right_state == 1 && left_state == 1)
         {
-          drive_robot(0, 2);  // This request a left  
+          drive_robot(0.0, 0.0, 2);  // This request a left  
         }
     }
     else {
@@ -125,17 +126,17 @@ void process_image_callback(const sensor_msgs::Image img)
 
         // Depending on the white ball position, call the drive_bot function and pass velocities to it
         if (avg <= width / 3){
-	    drive_robot(0.0, 1.0);  // This request should drive my_robot left
+	    drive_robot(0.0, 1.0, 0.0);  // This request should drive my_robot left
             left_state = 1;
             right_state = 0;    
         }
         else if (avg >= 2 * width / 3){
-	    drive_robot(0.0, -1.0); // This request drives my_robot right
+	    drive_robot(0.0, -1.0, 0.0); // This request drives my_robot right
             left_state = 0;
             right_state = 1; 
         }
         else{
-	    drive_robot(1.0, 0.0);  // This request drives my_robot robot forward
+	    drive_robot(1.0, 0.0, 0.0);  // This request drives my_robot robot forward
             left_state = 1;
             right_state = 1; 
         }

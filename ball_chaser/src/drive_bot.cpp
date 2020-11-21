@@ -18,12 +18,13 @@ bool handle_drive_request(ball_chaser::DriveToTarget::Request& req,
 
     // Publish angles to drive the robot
     motor_command.linear.x = req.linear_x;
+    motor_command.linear.y = req.linear_y;
     motor_command.angular.z = req.angular_z;
     
     motor_command_publisher.publish(motor_command);
 
     // Return a response message
-    res.msg_feedback = "Velocities set - linear_x: " + std::to_string(req.linear_x) + " , angular_z: " + std::to_string(req.angular_z);
+    res.msg_feedback = "Velocities set - linear_x: " + std::to_string(req.linear_x) + ", Velocities set - linear_y: " + std::to_string(req.linear_y) + " , angular_z: " + std::to_string(req.angular_z);
     ROS_INFO_STREAM(res.msg_feedback);
     
     return true;
